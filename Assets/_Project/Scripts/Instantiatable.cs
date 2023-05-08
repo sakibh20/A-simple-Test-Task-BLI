@@ -55,7 +55,7 @@ namespace _Project.Scripts
             _dragableObject.canDrag = true;
             _selected = true;
             _dragableObject.translate = true;
-            CustomDebug.LogWarning("Manage On Select");
+            
             TweenYPos();
             _referenceManager.selectionManager.OnSelected(this);
         }
