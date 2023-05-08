@@ -16,7 +16,7 @@ namespace _Project.Scripts
         public Modes ActiveMode => activeMode;
 
         //set => activeMode = value;
-        public event Action OnModeChange;
+        public static event Action OnModeChange;
         
         private ReferenceManager _referenceManager;
         

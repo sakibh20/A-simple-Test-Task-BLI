@@ -8,6 +8,7 @@ namespace _Project.Scripts
         [Header("Scripts")] 
         public InstantiateManager instantiateManager;
         public ModeManager modeManager;
+        public SelectionManager selectionManager;
         
         [Space, Header("Objects")]
         public Transform objectsParent;

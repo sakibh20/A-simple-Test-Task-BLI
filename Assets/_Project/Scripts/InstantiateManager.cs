@@ -22,6 +22,8 @@ namespace _Project.Scripts
 
         public InstantiatableTypes SelectedTypes => selectedType;
 
+        public static event Action<ISelectable> OnNewInstantiated;
+
         private Vector3 _targetPos;
         
 
@@ -63,6 +65,8 @@ namespace _Project.Scripts
             Vector3 yOffset = new Vector3(0, customCubeScale.y / 2.0f, 0);
             
             cube.localPosition = _targetPos+yOffset;
+            
+            OnNewInstantiated?.Invoke(cube.GetComponent<ISelectable>());
         }
 
         private void InstantiateSphere()
@@ -72,6 +76,8 @@ namespace _Project.Scripts
             
             Vector3 yOffset = new Vector3(0, customSphereScale.y / 2.0f, 0);
             sphere.localPosition = _targetPos+yOffset;
+            
+            OnNewInstantiated?.Invoke(sphere.GetComponent<ISelectable>());
         }
     }
 }

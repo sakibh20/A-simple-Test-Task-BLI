@@ -37,10 +37,16 @@ namespace _Project.Scripts
                 selectable.OnSelect();
                 EnableEditMode();
             }
+            
             else if (_hit.collider.CompareTag("ground"))
             {
+                if (_referenceManager.modeManager.ActiveMode != Modes.Instantiate)
+                {
+                    EnableInstantiateMode();
+                    return;
+                }
+                
                 _referenceManager.instantiateManager.Instantiate(_hit.point);
-                EnableInstantiateMode();
             }
         }
 
