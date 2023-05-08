@@ -7,6 +7,11 @@ using Sequence = DG.Tweening.Sequence;
 
 namespace _Project.Scripts
 {
+    public enum Actions
+    {
+        Translate,
+        Rotate
+    }
     public class Instantiatable : MonoBehaviour, ISelectable
     {
         private Vector3 _lastPos;
@@ -21,6 +26,7 @@ namespace _Project.Scripts
         private SelectionManager _selectionManager;
         private ReferenceManager _referenceManager;
         private DragableObject _dragableObject;
+        private Actions _actionOnSelect = Actions.Translate;
 
         private void Awake()
         {
@@ -48,6 +54,7 @@ namespace _Project.Scripts
 
             _dragableObject.canDrag = true;
             _selected = true;
+            _dragableObject.translate = true;
             CustomDebug.LogWarning("Manage On Select");
             TweenYPos();
             _referenceManager.selectionManager.OnSelected(this);
@@ -58,6 +65,7 @@ namespace _Project.Scripts
             _dragableObject.canDrag = false;
             _selected = false;
             _selectSequence.Kill();
+            _actionOnSelect = Actions.Translate;
             //_transform.DOKill();
             _transform.localPosition = new Vector3(_transform.localPosition.x, _normalY, _transform.localPosition.z);
         }
@@ -101,6 +109,20 @@ namespace _Project.Scripts
                 _selectSequence.Kill();
                 
                 Destroy(gameObject);
+            }
+            
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                if (_actionOnSelect == Actions.Translate)
+                {
+                    _actionOnSelect = Actions.Rotate;
+                    _dragableObject.translate = false;
+                }
+                else
+                {
+                    _actionOnSelect = Actions.Translate;
+                    _dragableObject.translate = true;
+                }
             }
         }
     }

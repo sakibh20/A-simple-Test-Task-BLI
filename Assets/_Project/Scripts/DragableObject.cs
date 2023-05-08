@@ -9,7 +9,9 @@ namespace _Project.Scripts
     {
         private Camera _mainCamera;
         public bool canDrag;
+        public bool translate;
         private Instantiatable _instantiatable;
+        private Vector3 _initialMousePosition;
 
         private void Start ()
         {
@@ -28,7 +30,20 @@ namespace _Project.Scripts
             {
                 return;
             }
-            
+
+
+            if (translate)
+            {
+                Translate();
+            }
+            else
+            {
+                Rotate(eventData);
+            }
+        }
+
+        private void Translate()
+        {
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition); // Get the ray from mouse position
             Vector3 position = transform.position; // Take current position of this draggable object as Plane's Origin
             Vector3 planesNormal = -_mainCamera.transform.forward; // Take current negative camera's forward as Plane's Normal
@@ -37,10 +52,8 @@ namespace _Project.Scripts
 
 
             Vector3 moveDirection = (newPosition-transform.position);
-            
-            // Debug.DrawRay(transform.position + (moveDirection), transform.TransformDirection(Vector3.down) * 50, Color.yellow);
-            
-            
+
+
             RaycastHit hit;
             if (Physics.Raycast(transform.position + (moveDirection*2), transform.TransformDirection(-Vector3.up), out hit, 50))
             {
@@ -51,13 +64,34 @@ namespace _Project.Scripts
             }
         }
 
+        private void Rotate(PointerEventData eventData)
+        {
+            Vector3 currentMousePosition = eventData.position;
+            Vector3 mouseDelta = currentMousePosition - _initialMousePosition;
+            float rotationY = -mouseDelta.x * Time.deltaTime * 250.0f;
+            transform.Rotate(0, rotationY, 0);
+            _initialMousePosition = currentMousePosition;
+        }
+
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (!canDrag)
+            {
+                return;
+            }
+            
             _instantiatable.PauseTween();
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            _initialMousePosition = Vector3.zero;
+            
+            if (!canDrag)
+            {
+                return;
+            }
+            
             _instantiatable.ResumeTween();
         }
     }
