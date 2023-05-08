@@ -1,6 +1,9 @@
+using System;
 using _Project.Core.Custom_Debug_Log.Scripts;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
+using Sequence = DG.Tweening.Sequence;
 
 namespace _Project.Scripts
 {
@@ -17,7 +20,13 @@ namespace _Project.Scripts
         private Transform _transform;
         private SelectionManager _selectionManager;
         private ReferenceManager _referenceManager;
-        
+        private DragableObject _dragableObject;
+
+        private void Awake()
+        {
+            _dragableObject = GetComponent<DragableObject>();
+        }
+
         private void Start()
         {
             _referenceManager = ReferenceManager.instance;
@@ -37,6 +46,7 @@ namespace _Project.Scripts
                 return;
             }
 
+            _dragableObject.canDrag = true;
             _selected = true;
             CustomDebug.LogWarning("Manage On Select");
             TweenYPos();
@@ -45,9 +55,10 @@ namespace _Project.Scripts
 
         public void OnDeSelect()
         {
+            _dragableObject.canDrag = false;
             _selected = false;
             _selectSequence.Kill();
-            _transform.DOKill();
+            //_transform.DOKill();
             _transform.localPosition = new Vector3(_transform.localPosition.x, _normalY, _transform.localPosition.z);
         }
 
@@ -60,6 +71,37 @@ namespace _Project.Scripts
             _selectSequence.SetLoops(-1);
 
             _selectSequence.Play();
+        }
+
+        public void PauseTween()
+        {
+            _selectSequence.Pause();
+        }
+        
+        public void ResumeTween()
+        {
+            _selectSequence.Restart();
+        }
+
+
+        private void Update()
+        {
+            if (!_selected)
+            {
+                return;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                _referenceManager.selectionManager.OnDeleted(this);
+
+                _referenceManager.modeManager.ChangeMode(Modes.Instantiate);
+
+                //_transform.DOKill();
+                _selectSequence.Kill();
+                
+                Destroy(gameObject);
+            }
         }
     }
 }

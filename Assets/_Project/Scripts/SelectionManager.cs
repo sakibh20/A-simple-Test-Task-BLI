@@ -6,7 +6,7 @@ namespace _Project.Scripts
 {
     public class SelectionManager : MonoBehaviour
     {
-        [SerializeField] private List<ISelectable> allSelectables;
+        private List<ISelectable> allSelectables;
 
         private ISelectable _currentlySelected;
 
@@ -37,17 +37,18 @@ namespace _Project.Scripts
             }
         }
         
-        private void OnDeleted(ISelectable selectable)
+        public void OnDeleted(ISelectable selectable)
         {
             if(allSelectables.Contains(selectable))
             {
                 allSelectables.Remove(selectable);
+                _currentlySelected = null;
             }
         }
 
         public void OnSelected(ISelectable selectable)
         {
-            if (_currentlySelected != null)
+            if (_currentlySelected != null && _currentlySelected!= selectable)
             {
                 _currentlySelected.OnDeSelect();
             }
