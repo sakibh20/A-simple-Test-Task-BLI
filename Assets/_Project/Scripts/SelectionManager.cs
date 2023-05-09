@@ -10,12 +10,19 @@ namespace _Project.Scripts
 
         private ISelectable _currentlySelected;
 
+        public static event Action<List<ISelectable>> OnListRefreshed;
+        
         private ReferenceManager _referenceManager;
+
+        private void Awake()
+        {
+            
+            allSelectables = new List<ISelectable>();
+        }
 
         private void Start()
         {
             _referenceManager = ReferenceManager.instance;
-            allSelectables = new List<ISelectable>();
         }
 
         private void OnEnable()
@@ -34,7 +41,14 @@ namespace _Project.Scripts
             if(!allSelectables.Contains(selectable))
             {
                 allSelectables.Add(selectable);
+
+                OnListRefreshed?.Invoke(allSelectables);
             }
+        }
+
+        public void RefreshList()
+        {
+            OnListRefreshed?.Invoke(allSelectables);
         }
         
         public void OnDeleted(ISelectable selectable)
@@ -43,6 +57,8 @@ namespace _Project.Scripts
             {
                 allSelectables.Remove(selectable);
                 _currentlySelected = null;
+
+                OnListRefreshed?.Invoke(allSelectables);
             }
         }
 

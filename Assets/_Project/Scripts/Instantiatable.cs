@@ -28,6 +28,8 @@ namespace _Project.Scripts
         private DragableObject _dragableObject;
         private Actions _actionOnSelect = Actions.Translate;
 
+        public InstantiatableTypes type;
+
         private void Awake()
         {
             _dragableObject = GetComponent<DragableObject>();
@@ -43,6 +45,16 @@ namespace _Project.Scripts
 
             _normalY = _lastPos.y;
             _upY = _normalY + (_tweenValue * _transform.localScale.y);
+        }
+
+        public InstantiatableTypes Type()
+        {
+            return type;
+        }
+
+        public Transform Transform()
+        {
+            return transform;
         }
 
         public void OnSelect()
@@ -68,6 +80,8 @@ namespace _Project.Scripts
             _actionOnSelect = Actions.Translate;
             //_transform.DOKill();
             _transform.localPosition = new Vector3(_transform.localPosition.x, _normalY, _transform.localPosition.z);
+            
+            _referenceManager.selectionManager.RefreshList();
         }
 
         private void TweenYPos()

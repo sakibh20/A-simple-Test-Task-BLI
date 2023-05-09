@@ -1986,6 +1986,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1669446098}
+  - component: {fileID: 1669446099}
   m_Layer: 0
   m_Name: Save System
   m_TagString: Untagged
@@ -2008,6 +2009,19 @@ Transform:
   m_Father: {fileID: 1657925872}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1669446099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669446097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df9f1642b89c3fa468e7df26dd4ba221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allSelectableItems: []
 --- !u!1 &1683906132
 GameObject:
   m_ObjectHideFlags: 0
